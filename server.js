@@ -15,7 +15,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/rbac').then(() => {
+mongoose.connect('mongodb://localhost:27017/company').then(() => {
 	console.log('Connected to the Database successfully');
 });
 
@@ -30,11 +30,9 @@ app.use(async (req, res, next) => {
 		);
 		// Check if token has expired
 		if (exp < Date.now().valueOf() / 1000) {
-			return res
-				.status(401)
-				.json({
-					error: 'JWT token has expired, please login to obtain a new one',
-				});
+			return res.status(401).json({
+				error: 'JWT token has expired, please login to obtain a new one',
+			});
 		}
 		res.locals.loggedInUser = await User.findById(userId);
 		next();
